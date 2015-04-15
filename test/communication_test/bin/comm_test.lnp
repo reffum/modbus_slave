@@ -1,0 +1,4 @@
+--cpu Cortex-M4.fp "..\bin\startup_stm32f4xx.o" "..\bin\system_stm32f4xx.o" "..\bin\gpio.o" "..\bin\serial.o" "..\bin\timer.o" "..\bin\main.o" "..\bin\stm32f4xx_gpio.o" "..\bin\stm32f4xx_tim.o" "..\bin\stm32f4xx_usart.o" "..\bin\stm32f4xx_rcc.o" --strict --scatter "..\bin\comm_test.sct" 
+--summary_stderr --info summarysizes --map --xref --callgraph --symbols 
+--info sizes --info totals --info unused --info veneers 
+ --list "..\lst\comm_test.map" -o "..\bin\comm_test.axf"

@@ -1,0 +1,28 @@
+*** Creating Trace Output File '..\bin\comm_test.tra' Ok.
+### Preparing for ADS-LD.
+### Creating ADS-LD Command Line
+### List of Objects: adding '"..\bin\startup_stm32f4xx.o"'
+### List of Objects: adding '"..\bin\system_stm32f4xx.o"'
+### List of Objects: adding '"..\bin\gpio.o"'
+### List of Objects: adding '"..\bin\serial.o"'
+### List of Objects: adding '"..\bin\timer.o"'
+### List of Objects: adding '"..\bin\main.o"'
+### List of Objects: adding '"..\bin\stm32f4xx_gpio.o"'
+### List of Objects: adding '"..\bin\stm32f4xx_tim.o"'
+### List of Objects: adding '"..\bin\stm32f4xx_usart.o"'
+### List of Objects: adding '"..\bin\stm32f4xx_rcc.o"'
+### ADS-LD Command completed:
+--cpu Cortex-M4.fp "..\bin\startup_stm32f4xx.o" "..\bin\system_stm32f4xx.o" "..\bin\gpio.o" "..\bin\serial.o" "..\bin\timer.o" "..\bin\main.o" "..\bin\stm32f4xx_gpio.o" "..\bin\stm32f4xx_tim.o" "..\bin\stm32f4xx_usart.o" "..\bin\stm32f4xx_rcc.o" --strict --scatter "..\bin\comm_test.sct" 
+--summary_stderr --info summarysizes --map --xref --callgraph --symbols 
+--info sizes --info totals --info unused --info veneers 
+ --list "..\lst\comm_test.map" -o "..\bin\comm_test.axf"### Preparing Environment (PrepEnvAds)
+### ADS-LD Output File: '..\bin\comm_test.axf'
+### ADS-LD Command File: '..\bin\comm_test.lnp'
+### Checking for dirty Components...
+### Creating CmdFile '..\bin\comm_test.lnp', Handle=0x000009EC
+### Writing '.lnp' file
+### ADS-LD Command file '..\bin\comm_test.lnp' is ready.
+### ADS-LD: About to start ADS-LD Thread.
+### ADS-LD: executed with 0 errors
+### Updating obj list
+### LDADS_file() completed.
