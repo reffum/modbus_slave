@@ -348,7 +348,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>..\inc</IncludePath>
+              <IncludePath></IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -411,7 +411,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>utest</GroupName>
+          <GroupName>test</GroupName>
           <Files>
             <File>
               <FileName>makefile</FileName>

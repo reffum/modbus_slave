@@ -102,6 +102,29 @@ void modbus_ascii_rec_byte(
 		
 }
 
+/**
+* @brief Register function handler
+* @function Function code
+* @handler New function handler
+* @retval 0 - SUCESS, Other error
+**/
+int modbus_ascii_register_func_hand(
+	struct modbus_ascii* mb,
+	uint8_t function,
+	void * handler)
+{
+	if(	function > MODBUS_FUNCTION_NUM	||
+		!handler)
+	{
+		return -1;
+	}
+	
+	mb->pdu.func_handlers[function] = handler;
+	
+	return 0;
+}
+
+
 /**********************************************************************
 * Private functions
 **********************************************************************/
