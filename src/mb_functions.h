@@ -9,16 +9,16 @@
 #ifndef _MB_FUNCTIONS_H_
 #define _MB_FUNCTIONS_H_
 
-const int MODBUS_FUNCTION_NUM 	= 127;
+#define MODBUS_FUNCTION_NUM  127
 
 /* Function codes */
 #define MB_READ_HOLD			0x03
-#define MB_WRITE_SINGE			0x06
+#define MB_WRITE_SINGLE			0x06
 #define MB_EXCEPTION			0x81
 
 /* Exception codes */
 #define MB_ILLEGAL_FUNCTION		0x01
-
+#define MB_ILLEGAL_DATA_ADDRESS		0x02
 
 /**
 * @brief Read hold function handler prototipe

@@ -8,14 +8,20 @@
 #ifndef _MB_H_
 #define _MB_H_
 #include <stdint.h>
+#include "mb_functions.h"
 
 /* This MB object */
 struct modbus_ascii;
 
 /**
 * @brief Init MB 
+* @id Modbus ID
+* @retval Pointer to new modbus_ascii structer, if SUCESS
+*	  NULL - if error
 */
-void modbus_ascii_init(struct modbus_ascii*);
+struct modbus_ascii*
+ modbus_ascii_init(
+    uint8_t id);
 
 /**
 * @brief Receive new byte
@@ -41,5 +47,13 @@ int modbus_ascii_register_func_hand(
 	uint8_t function,
 	void * handler);
 
+/**
+ * @brief Set responce handler
+ * @handler handler pointer
+ **/
+void modbus_ascii_set_resp_handler
+	(
+	 struct modbus_ascii*,
+	 void(*handler)(uint8_t*, unsigned));
 
 #endif	/* _MB_H_ */

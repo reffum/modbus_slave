@@ -11,9 +11,9 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-const char sof_char = ':';
-const char LF = '\n';
-const char CR = '\r';
+#define  sof_char  ':'
+#define  LF  '\n'
+#define  CR  '\r'
 
 /**
 * @brief Define that byte is a ModBus ASCII byte

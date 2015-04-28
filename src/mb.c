@@ -9,12 +9,13 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <string.h>
+#include <assert.h>
 #include "ascii.h"
 #include "pdu.h"
 #include "lrc.h"
 
-const int REC_BUFFER_SIZE = PDU_BUFF_SIZE*2 + 3;
-const char BROADCAST = 255;
+#define REC_BUFFER_SIZE  (PDU_BUFF_SIZE*2 + 3)
+#define BROADCAST 255
 
 enum REC_STATE
 {
@@ -57,11 +58,25 @@ PRIVATE void parse_fdu(struct modbus_ascii* t);
 
 /**
 * @brief Init MB 
+* @id Modbus ID
+* @retval Pointer to new modbus_ascii structer, if SUCESS
+*	  NULL - if error
 */
-void modbus_ascii_init(struct modbus_ascii* t, uint8_t id)
+struct modbus_ascii*
+ modbus_ascii_init(
+    uint8_t id)
 {
-	memset(t, 0, sizeof(struct modbus_ascii));
-	t->id = id;
+	struct modbus_ascii *t;
+  	t = (struct modbus_ascii*) malloc(sizeof(struct modbus_ascii));
+
+	if(t)
+	{
+
+	  memset(t, 0, sizeof(struct modbus_ascii));
+	  t->id = id;
+	}
+
+	return t;
 }
 
 /**
@@ -124,6 +139,19 @@ int modbus_ascii_register_func_hand(
 	return 0;
 }
 
+/**
+ * @brief Set responce handler
+ * @handler handler pointer
+ **/
+void modbus_ascii_set_resp_handler
+	(
+	 struct modbus_ascii* mb,
+	 void(*handler)(uint8_t*, unsigned)
+)
+{
+  assert(mb);
+  mb->responce_handler = handler;
+}
 
 /**********************************************************************
 * Private functions
@@ -145,17 +173,17 @@ bool check_eof(struct modbus_ascii* t)
 	uint8_t last, prev;
 	unsigned p = t->rec_buffer_count;
 	
-	last = t->rec_buffer[p];
-	prev = t->rec_buffer[p - 1];
+	last = t->rec_buffer[p - 1];
+	prev = t->rec_buffer[p - 2];	
 	
-	return (last == CR) && (prev == LF);
+	return (prev == CR) && (last == LF);
 }
 
 void parse_fdu(struct modbus_ascii* t)
 {
 	uint8_t ascii_l, ascii_h, byte;
 	uint8_t id;
-	unsigned i, j, rec_count, req_count;
+	unsigned i, j, req_count;
 	struct pdu *pdu = &t->pdu;
 	struct ASCII ascii;
 	uint8_t lrc;
@@ -176,14 +204,14 @@ void parse_fdu(struct modbus_ascii* t)
 	
 	/* PDU */
 	for(i = 3, req_count = 0; 
-		i < t->rec_buffer_count - 2; 
+	    i < t->rec_buffer_count - 2;
 		i = i + 2)
 	{
 		ascii_h = t->rec_buffer[i];
-		ascii_l = t->rec_buffer[i];
+		ascii_l = t->rec_buffer[i + 1];
 		
 		byte = ascii2byte(ascii_h, ascii_l);
-		pdu->req_buf[rec_count++] = byte;		
+		pdu->req_buf[req_count++] = byte;		
 	}
 	
 	/* LRC check */
@@ -193,7 +221,7 @@ void parse_fdu(struct modbus_ascii* t)
 		return ;
 	}
 	
-	pdu->req_count = req_count;	
+	pdu->req_count = req_count - 1;
 	perf_pdu(pdu, !t->is_broadcast);
 	
 	/* Responce */

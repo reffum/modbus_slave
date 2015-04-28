@@ -11,7 +11,7 @@
 #include <stdbool.h>
 #include "mb_functions.h"
 
-const int PDU_BUFF_SIZE			= 128;
+#define PDU_BUFF_SIZE  512
 
 struct pdu
 {

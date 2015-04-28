@@ -6,6 +6,7 @@
 ***********************************************************
 */
 #include <string.h>
+#include <assert.h>
 #include "pdu.h"
 #include "mb_functions.h"
 
@@ -38,6 +39,8 @@ uint16_t __inline byte2word(
 	return (uint16_t)h << 8 | l;
 }
 
+PRIVATE void le2bea(uint16_t* leVal, unsigned count);
+PRIVATE uint16_t le2be(uint16_t leVal);
 /**
 * @brief Perform Modbus PDU
 * @pdu	 PDU object
@@ -61,7 +64,7 @@ void perf_pdu(struct pdu* t, bool need_resp)
 			read_hold(t);
 			break;
 		
-		case MB_WRITE_SINGE:
+		case MB_WRITE_SINGLE:
 			write_single(t);
 			break;
 		
@@ -94,10 +97,12 @@ void read_hold(struct pdu* pdu)
 	);
 	
 	len = byte2word(
-		pdu->req_buf[2],
-		pdu->req_buf[1]
+		pdu->req_buf[4],
+		pdu->req_buf[3]
 	);
-	
+
+	assert(len > 0);
+
 	if(len > READ_HOLD_MAX)
 	{
 		exception_responce(pdu, MB_ILLEGAL_FUNCTION);
@@ -117,7 +122,12 @@ void read_hold(struct pdu* pdu)
 		return;
 	}
 	
+	le2bea((uint16_t*)(pdu->resp_buf + 2), len);
+
 	pdu->resp_buf[1] = len * 2;
+	pdu->resp_buf[0] = MB_READ_HOLD;
+
+	pdu->resp_count = len*2 + 2;
 	
 	pdu->is_resp = true;
 }
@@ -143,7 +153,7 @@ void write_single(struct pdu* pdu)
 		pdu->req_buf[1]
 	);
 	
-	r = ((write_single_handler)(pdu->func_handlers[MB_WRITE_SINGE]))
+	r = ((write_single_handler)(pdu->func_handlers[MB_WRITE_SINGLE]))
 		( 	addr, 
 			value
 	);
@@ -153,7 +163,7 @@ void write_single(struct pdu* pdu)
 	{
 		exception_responce(pdu, r);
 		return;
-	}
+	}	
 
 	pdu->resp_count = pdu->req_count;
 	memcpy(pdu->resp_buf, pdu->req_buf, pdu->req_count);
@@ -170,4 +180,22 @@ void exception_responce(
 	pdu->resp_count = 2;
 	pdu->resp_buf[0] = MB_EXCEPTION;
 	pdu->resp_buf[1] = code;	
+}
+
+uint16_t le2be(uint16_t leVal)
+{
+  uint8_t l,h;
+
+  l =  (uint8_t)(leVal & 0xFF);
+  h =  (uint8_t)((leVal & 0xFF00) >> 8);
+
+  return (((uint16_t)l) << 8) | h;
+}
+
+void le2bea(uint16_t* leVal, unsigned count)
+{
+  int i;
+
+  for(i = 0; i < count; i++)
+    leVal[i] = le2be(leVal[i]);
 }
