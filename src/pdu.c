@@ -149,8 +149,8 @@ void write_single(struct pdu* pdu)
 	);
 	
 	value = byte2word(
-		pdu->req_buf[2],
-		pdu->req_buf[1]
+		pdu->req_buf[4],
+		pdu->req_buf[3]
 	);
 	
 	r = ((write_single_handler)(pdu->func_handlers[MB_WRITE_SINGLE]))

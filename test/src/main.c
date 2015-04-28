@@ -235,5 +235,13 @@ void LastErrorString(LPTSTR lpszFunction)
 void lf2crlf(unsigned char* str)
 {
   unsigned char* lfpos = strchr(str, 0xA);
-  *lfpos = 0xD, *(lfpos + 1) = 0xA, *(lfpos + 2) = NULL;
+  
+  if(lfpos == str)/* Empty line */
+  {
+    *str = NULL;
+  }
+  else
+  {
+    *lfpos = 0xD, *(lfpos + 1) = 0xA, *(lfpos + 2) = NULL;
+  }
 }
