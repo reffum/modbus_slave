@@ -9,6 +9,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <string.h>
+#include <stdlib.h>
 #include <assert.h>
 #include "ascii.h"
 #include "pdu.h"
