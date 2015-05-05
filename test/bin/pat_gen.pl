@@ -23,7 +23,15 @@ for($addr = 0; $addr < MAX_REG; $addr++)
 	. sprintf("%02hhX", $lrc)
 	."\n";
 
-    $resp = $req;    
+    #Responce(value = addr - 1)
+    $value = $addr - 1;
+    $lrc =  lrc(1, 6, $addr >> 8, $addr & 0xFF, $value >> 8, $value & 0xFF);
+
+    $resp = ":0106"  
+	. sprintf("%04hX", $addr)
+	. sprintf("%04hX", $value)
+	. sprintf("%02hhX", $lrc)
+	."\n";    
 
     print $ws_file $req;
     print $ws_file $resp;
