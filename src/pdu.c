@@ -155,7 +155,7 @@ void write_single(struct pdu* pdu)
 	
 	r = ((write_single_handler)(pdu->func_handlers[MB_WRITE_SINGLE]))
 		( 	addr, 
-			value
+			&value
 	);
 	
 	/* Error */

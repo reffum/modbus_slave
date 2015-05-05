@@ -44,7 +44,7 @@
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
           <OutputDirectory>..\bin\</OutputDirectory>
-          <OutputName>modbus.1.0.0</OutputName>
+          <OutputName>modbus.1.1.0</OutputName>
           <CreateExecutable>0</CreateExecutable>
           <CreateLib>1</CreateLib>
           <CreateHexFile>0</CreateHexFile>

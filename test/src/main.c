@@ -37,7 +37,7 @@ static int read_hold_hand(
 
 static int write_single_hand(
     uint16_t addr,
-    uint16_t value);
+    uint16_t *value);
 			     
 static void responce(
     uint8_t* data,
@@ -146,9 +146,9 @@ static int read_hold_hand(
 
 static int write_single_hand(
     uint16_t addr,
-    uint16_t value)
+    uint16_t *value)
 {
-  hold_regs[addr] = value;
+  hold_regs[addr] = *value;
 
   return 0;
 }
