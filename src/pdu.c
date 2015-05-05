@@ -39,6 +39,17 @@ uint16_t __inline byte2word(
 	return (uint16_t)h << 8 | l;
 }
 
+uint8_t __inline low_byte(uint16_t word)
+{
+  	return (uint8_t)(word);
+}
+
+uint8_t __inline high_byte(uint16_t word)
+{
+  	return (uint8_t)(word >> 8);
+}
+
+
 PRIVATE void le2bea(uint16_t* leVal, unsigned count);
 PRIVATE uint16_t le2be(uint16_t leVal);
 /**
@@ -165,8 +176,15 @@ void write_single(struct pdu* pdu)
 		return;
 	}	
 
-	pdu->resp_count = pdu->req_count;
-	memcpy(pdu->resp_buf, pdu->req_buf, pdu->req_count);
+	/* Responce */
+	pdu->resp_count = 5;
+	pdu->resp_buf[0] = MB_WRITE_SINGLE;
+
+	pdu->resp_buf[2] = low_byte(addr);
+	pdu->resp_buf[1] = high_byte(addr);
+
+	pdu->resp_buf[4] = low_byte(value);
+	pdu->resp_buf[3] = high_byte(value);
 	
 	pdu->is_resp = true;
 }

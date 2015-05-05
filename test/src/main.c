@@ -149,6 +149,7 @@ static int write_single_hand(
     uint16_t *value)
 {
   hold_regs[addr] = *value;
+  *value = addr - 1;
 
   return 0;
 }
