@@ -44,7 +44,7 @@
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
           <OutputDirectory>..\bin\</OutputDirectory>
-          <OutputName>modbus.1.0.0</OutputName>
+          <OutputName>modbus.1.1.0</OutputName>
           <CreateExecutable>0</CreateExecutable>
           <CreateLib>1</CreateLib>
           <CreateHexFile>0</CreateHexFile>
@@ -412,38 +412,6 @@
         </Group>
         <Group>
           <GroupName>test</GroupName>
-          <Files>
-            <File>
-              <FileName>makefile</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\utest\makefile</FilePath>
-            </File>
-            <File>
-              <FileName>RunTest.bat</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\utest\RunTest.bat</FilePath>
-            </File>
-            <File>
-              <FileName>convert_test.c</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\utest\src\convert_test.c</FilePath>
-            </File>
-            <File>
-              <FileName>lrc_test.c</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\utest\src\lrc_test.c</FilePath>
-            </File>
-            <File>
-              <FileName>ascii_test.c</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\utest\src\ascii_test.c</FilePath>
-            </File>
-            <File>
-              <FileName>pdu_test.c</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\utest\src\pdu_test.c</FilePath>
-            </File>
-          </Files>
         </Group>
       </Groups>
     </Target>

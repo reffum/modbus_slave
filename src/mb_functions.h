@@ -40,7 +40,7 @@ typedef int(*read_hold_handler)(
 **/
 typedef int(*write_single_handler)(
 	uint16_t addr,
-	uint16_t value);
+	uint16_t *value);
 
 	
 
