@@ -251,7 +251,7 @@ void parse_fdu(struct modbus_ascii* t)
 		lrc = get_lrc_id(
 			pdu->resp_buf, 
 			pdu->resp_count, 
-			id);
+			id) + 1;
 		
 		ascii = byte2ascii(lrc);
 		t->resp_buffer[i] = ascii.h;
