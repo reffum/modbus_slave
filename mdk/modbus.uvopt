@@ -203,10 +203,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>36</ColumnNumber>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>20</TopLine>
-      <CurrentLine>28</CurrentLine>
+      <TopLine>21</TopLine>
+      <CurrentLine>21</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\pdu.c</PathWithFileName>
       <FilenameWithoutPath>pdu.c</FilenameWithoutPath>
