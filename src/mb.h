@@ -7,6 +7,11 @@
 */
 #ifndef _MB_H_
 #define _MB_H_
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <stdint.h>
 #include "mb_functions.h"
 
@@ -55,5 +60,9 @@ void modbus_ascii_set_resp_handler
 	(
 	 struct modbus_ascii*,
 	 void(*handler)(uint8_t*, unsigned));
+	 
+#ifdef __cplusplus
+ }
+#endif
 
 #endif	/* _MB_H_ */
