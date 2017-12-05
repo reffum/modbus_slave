@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Atmel Studio Solution File, Format Version 11.00
+Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "modbus", "modbus.cproj", "{D42BB8ED-06CC-4EA8-B2AB-2A89C6076EA2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|AVR = Debug|AVR
+		Release|AVR = Release|AVR
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D42BB8ED-06CC-4EA8-B2AB-2A89C6076EA2}.Debug|AVR.ActiveCfg = Debug|AVR
+		{D42BB8ED-06CC-4EA8-B2AB-2A89C6076EA2}.Debug|AVR.Build.0 = Debug|AVR
+		{D42BB8ED-06CC-4EA8-B2AB-2A89C6076EA2}.Release|AVR.ActiveCfg = Release|AVR
+		{D42BB8ED-06CC-4EA8-B2AB-2A89C6076EA2}.Release|AVR.Build.0 = Release|AVR
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
