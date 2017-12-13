@@ -17,8 +17,15 @@
 #define MB_EXCEPTION			0x81
 
 /* Exception codes */
-#define MB_ILLEGAL_FUNCTION		0x01
+#define MB_ILLEGAL_FUNCTION			0x01
 #define MB_ILLEGAL_DATA_ADDRESS		0x02
+#define MB_ILLEGAL_DATA_VALUE		0x03
+#define MB_SERVICE_DEVICE_FAILURE	0x04
+#define MB_ACKNOWLADGE				0x05
+#define MB_SERVICE_DEVICE_BUSY		0x06
+#define MB_MEMORY_PARITY_ERROR		0x08
+#define MB_GATEWAY_PATH_UNAVIABLE	0x0A
+#define MB_GATEWAY_TARGET_FAILED	0x0B
 
 /**
 * @brief Read hold function handler prototipe

@@ -1,16 +1,7 @@
-<html>
-<body>
-<pre>
-<h1>µVision Build Log</h1>
-<h2>Project:</h2>
-C:\Work\modbus_ascii\mdk\modbus.uvproj
-Project File Date:  11/16/2017
-
-<h2>Output:</h2>
-Build target 'cortex-m3'
+Build target 'cortex-m4'
 compiling ascii.c...
 compiling lrc.c...
 compiling pdu.c...
 compiling mb.c...
 creating Library...
-"..\bin\cortex-m3\modbus.1.1.1.lib" - 0 Error(s), 0 Warning(s).
+"..\bin\cortex-m4\modbus.1.2.1.lib" - 0 Error(s), 0 Warning(s).
