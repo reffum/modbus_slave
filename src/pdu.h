@@ -11,7 +11,11 @@
 #include <stdbool.h>
 #include "mb_functions.h"
 
+#ifdef _CORTEX_M3
+#define PDU_BUFF_SIZE  256
+#else 
 #define PDU_BUFF_SIZE  512
+#endif
 
 struct pdu
 {
