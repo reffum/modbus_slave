@@ -14,6 +14,11 @@
 /* Function codes */
 #define MB_READ_HOLD			0x03
 #define MB_WRITE_SINGLE			0x06
+#define MB_WRITE_MULTIPLE_REGS	0x10
+
+// Encapsulated Interface Transport
+#define MB_EIT					0x2B
+
 #define MB_EXCEPTION			0x81
 
 /* Exception codes */
@@ -48,8 +53,33 @@ typedef int(*read_hold_handler)(
 typedef int(*write_single_handler)(
 	uint16_t addr,
 	uint16_t *value);
-
 	
+/**
+ * Write multiple registers 
+ * addr - starting address
+ * num - quantaty of registers 
+ * values - registers values
+ * retval 0 - SUCCESS, other - exception code
+ **/
+typedef int(*write_multiple_registers_handler)(
+	uint16_t addr,
+	unsigned num,
+	const uint16_t* values);
+	
+/**
+ * Encapsulated Interface Transport function
+ * data_req - MEI request data 
+ * size_req - MEI request data size
+ * data_resp - MEI responce data
+ * size_resp - MEI responce data size ( 251 max )
+ * retval 0 - SUCCESS, other - exception code
+ **/
+typedef int(*eit_hanlder)(
+	const uint8_t * data_req,
+	unsigned size_req,
+	uint8_t *data_resp,
+	unsigned *size_resp
+	);
 
 
 #endif	/* _MB_FUNCTIONS_H_ */

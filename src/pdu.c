@@ -13,7 +13,12 @@
 /**********************************************************************
 * Constants
 **********************************************************************/
-const int READ_HOLD_MAX = 125;	/* Maximum number of registers in Read Hold request */
+const int READ_HOLD_MAX = 125;		/* Maximum number of registers in Read Hold request */
+const int WRITE_SINGLE_MAX = 123;	/* Maximum number of registers in Write Single request */
+
+/* MEI Type allowed values */
+static const uint8_t MEI_TYPE0 = 0x0D;
+static const uint8_t MEI_TYPE1 = 0x0E;
 
 /**********************************************************************
 * Private functions
@@ -27,6 +32,8 @@ const int READ_HOLD_MAX = 125;	/* Maximum number of registers in Read Hold reque
 /* Functions */
 PRIVATE void read_hold(struct pdu*);
 PRIVATE void write_single(struct pdu*);
+PRIVATE void eit(struct pdu*);
+PRIVATE void write_multiple_registers(struct pdu* pdu);
 
 PRIVATE void exception_responce(
 	struct pdu*, 
@@ -68,7 +75,7 @@ void perf_pdu(struct pdu* t, bool need_resp)
 		exception_responce(t, MB_ILLEGAL_FUNCTION);
 	}
 	else
-	{
+	{	
 		switch(func)
 		{
 		case MB_READ_HOLD:
@@ -77,6 +84,14 @@ void perf_pdu(struct pdu* t, bool need_resp)
 		
 		case MB_WRITE_SINGLE:
 			write_single(t);
+			break;
+		
+		case MB_WRITE_MULTIPLE_REGS:
+			write_multiple_registers(t);
+			break;
+		
+		case MB_EIT:
+			eit(t);
 			break;
 		
 		default:
@@ -189,6 +204,116 @@ void write_single(struct pdu* pdu)
 	pdu->is_resp = true;
 }
 
+/* Encapsulate Interface Transport */
+void eit(struct pdu* pdu)
+{
+	uint8_t mei_type;
+	uint8_t *data_req, *data_resp;
+	unsigned size_req, size_resp;
+	eit_hanlder handler;
+	int r;
+	
+	mei_type = pdu->req_buf[1];
+	
+	if(mei_type != MEI_TYPE0 && mei_type != MEI_TYPE1)
+	{
+		exception_responce(pdu, MB_ILLEGAL_DATA_VALUE);
+		return;
+	}
+	
+	data_req = &(pdu->req_buf[2]);
+	size_req = pdu->req_count - 2;
+	data_resp = &(pdu->resp_buf[2]);
+	
+	handler = (eit_hanlder)(pdu->func_handlers[MB_EIT]);
+	
+	if( !handler )
+	{
+		exception_responce(pdu, MB_ILLEGAL_FUNCTION);
+		return;		
+	}
+	
+	r = handler(data_req, size_req, data_resp, &size_resp);
+	
+	/* Error */
+	if(r)
+	{
+		exception_responce(pdu, r);
+		return;
+	}	
+
+	assert(size_resp + 2 <= PDU_BUFF_SIZE);
+	
+	pdu->resp_buf[0] = MB_EIT;
+	pdu->resp_buf[1] = mei_type;
+	
+	pdu->is_resp = true;
+}
+
+void write_multiple_registers(struct pdu* pdu)
+{
+	uint16_t addr;
+	uint16_t num, byte_count;
+	int i, r;
+	write_multiple_registers_handler handler;
+	
+	/* There is temporarily use pdu->resp_buf for registers value for memory save */
+	uint16_t *values = (uint16_t*)(pdu->resp_buf);
+	
+	addr = byte2word(
+		pdu->req_buf[2],
+		pdu->req_buf[1]
+	);
+	
+	num = byte2word(
+		pdu->req_buf[4],
+		pdu->req_buf[3]
+	);
+	
+	byte_count = pdu->req_buf[5];
+	
+	if(byte_count != num*2)
+	{
+		exception_responce(pdu, MB_ILLEGAL_DATA_VALUE);
+		return;				
+	}
+	
+	if(pdu->req_count != byte_count + 6)
+	{
+		exception_responce(pdu, MB_ILLEGAL_DATA_VALUE);
+		return;					
+	}
+	
+	for(i = 0; i < num; i++)
+	{
+		values[i] = byte2word(
+						pdu->req_buf[6 + num*2 + 1],
+						pdu->req_buf[6 + num*2]
+					);
+	}
+	
+	/* Call handler */
+	handler = (write_multiple_registers_handler)(pdu->func_handlers[MB_WRITE_MULTIPLE_REGS]);
+	
+	if(!handler)
+	{
+		exception_responce(pdu, MB_ILLEGAL_FUNCTION);
+		return;			
+	}
+	
+	r = handler(addr, num, values);
+	
+	if(r)
+	{
+		exception_responce(pdu, r);
+		return;		
+	}
+	
+	/* Responce */
+	memcpy(pdu->resp_buf, pdu->req_buf, 5);
+	pdu->is_resp = true;
+}
+
 void exception_responce(
 	struct pdu* pdu, 
 	uint8_t code)
@@ -196,7 +321,7 @@ void exception_responce(
 	pdu->is_resp = true;
 	
 	pdu->resp_count = 2;
-	pdu->resp_buf[0] = MB_EXCEPTION;
+	pdu->resp_buf[0] = pdu->req_buf[0] | 0x80;
 	pdu->resp_buf[1] = code;	
 }
 
