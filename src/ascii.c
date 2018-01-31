@@ -62,7 +62,7 @@ struct ASCII byte2ascii(uint8_t byte)
 **********************************************************************/
 uint8_t ascii2hbyte(char ch)
 {
-	toupper(ch);
+	ch = toupper(ch);
 	
 	if(isdigit(ch))
 	{

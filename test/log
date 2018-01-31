@@ -1,30 +1,0 @@
-	cl /Zi /DEBUG /D_DEBUG /I ..\src /Febin\test.exe src\main.c ..\src\*.c DbgHelp.lib
-main.c
-src\main.c(238) : warning C4047: '=' : 'unsigned char' differs in levels of indirection from 'void *'
-ascii.c
-lrc.c
-mb.c
-pdu.c
-Generating Code...
-Microsoft (R) Incremental Linker Version 10.00.40219.01
-Copyright (C) Microsoft Corporation.  All rights reserved.
-
-/debug 
-/out:bin\test.exe 
-main.obj 
-ascii.obj 
-lrc.obj 
-mb.obj 
-pdu.obj 
-DbgHelp.lib 
-	rm *.obj vc100.pdb
-	cd bin
-	test write_single.pat read_hold.pat
-Modbus test start...
-read_hold.pat fail
-Request::0103FFFF0001FD
-Responce fact::010302FFFFFC
-
-Responce expe::010302FFFFFC
-
-
