@@ -15,10 +15,11 @@ CFLAGS=/Zi /DEBUG /D_DEBUG
 all: test.exe
 	cd bin
 	test write_single.pat read_hold.pat exc.pat
-	
 clean:
-	rm -f bin/*
+	del /Q *.obj
+	del /Q *.pdb
+
 
 test.exe: $(SRC) $(INCL)
 	$(CPP) $(CFLAGS) $(INCS) /Febin\test.exe $(SRC) DbgHelp.lib
-	rm *.obj vc100.pdb
+	del /Q *.obj vc100.pdb
