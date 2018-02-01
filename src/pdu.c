@@ -246,6 +246,7 @@ void eit(struct pdu* pdu)
 	
 	pdu->resp_buf[0] = MB_EIT;
 	pdu->resp_buf[1] = mei_type;
+	pdu->resp_count = size_resp + 2;
 	
 	pdu->is_resp = true;
 }
