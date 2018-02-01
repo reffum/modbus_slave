@@ -12,8 +12,8 @@ for($i = 0; $i < 251; $i++){
     $eit_req .= sprintf("%02hhX", $i);
     $sum += $i
 }
-
-$eit_req .= "\n";
+$sum = -($sum & 0xFF);
+$eit_req .= sprintf("%hhX\n", $sum);
 
 print $eit_file $eit_req;
 print $eit_file ":012B0DC7\n"
