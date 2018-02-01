@@ -178,8 +178,11 @@ static int eit_hand(
 
   printf("\n");
 
-  // No data in responce
-  *size_resp = 0;
+  // Write 251 sequntial numbers in responce
+  for(i = 0; i < 251; i++){
+    data_resp[i] = i;
+  }
+  *size_resp = 251;
   return 0;
 }
 

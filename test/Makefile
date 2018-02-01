@@ -14,7 +14,7 @@ CFLAGS=/Zi /DEBUG /D_DEBUG
 
 all: test.exe
 	cd bin
-	test write_single.pat read_hold.pat exc.pat
+	test write_single.pat read_hold.pat exc.pat eit.pat
 clean:
 	del /Q *.obj
 	del /Q *.pdb
