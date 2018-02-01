@@ -38,6 +38,12 @@ static int read_hold_hand(
 static int write_single_hand(
     uint16_t addr,
     uint16_t *value);
+
+static int eit_hand(
+    const uint8_t *data_req,
+    unsigned size_req,
+    uint8_t *data_resp,
+    unsigned *size_resp);
 			     
 static void responce(
     uint8_t* data,
@@ -48,10 +54,8 @@ static void responce(
 static void save_debug_info(void);
 
 static void LastErrorString(LPTSTR lpszFunction);
-
 static /* Replace LF to CRLF */
-void lf2crlf(unsigned char* str);
-	     
+void lf2crlf(unsigned char* str);	     
 int main(int argc, char *argv[])
 {
   char *filename = NULL;
@@ -74,6 +78,7 @@ int main(int argc, char *argv[])
 
   modbus_ascii_register_func_hand(mb, MB_READ_HOLD, read_hold_hand);
   modbus_ascii_register_func_hand(mb, MB_WRITE_SINGLE, write_single_hand);
+  modbus_ascii_register_func_hand(mb, MB_EIT, eit_hand);
   modbus_ascii_set_resp_handler(mb, responce);
 
   for(file_n = 1; file_n < argc; file_n++)
@@ -93,7 +98,6 @@ int main(int argc, char *argv[])
       {
 	lf2crlf(req);
 	lf2crlf(resp);
-
 	memset(resp_fact, 0, sizeof(resp_fact));
 	resp_fact_len = 0;
 
@@ -153,6 +157,32 @@ static int write_single_hand(
 
   return 0;
 }
+
+
+/**
+ * Encapsulated Interface Transport handler.
+ **/
+static int eit_hand(
+    const uint8_t *data_req,
+    unsigned size_req,
+    uint8_t *data_resp,
+    unsigned *size_resp)
+{
+  int i;
+  
+  // Print request data
+  printf("EIT: ");
+  for(i = 0; i < size_req; i++){
+    printf("%hX ", data_req[i]);
+  }
+
+  printf("\n");
+
+  // No data in responce
+  *size_resp = 0;
+  return 0;
+}
+
 
 static void responce(
     uint8_t* data,
@@ -231,7 +261,6 @@ void LastErrorString(LPTSTR lpszFunction)
 
     LocalFree(lpMsgBuf);
 }
-
 /* Replace LF to CRLF */
 void lf2crlf(unsigned char* str)
 {

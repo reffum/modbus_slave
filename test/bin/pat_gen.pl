@@ -1,6 +1,7 @@
 # Generate ModBus test 
 use constant WS_FILE_NAME => "write_single.pat";
 use constant RH_FILE_NAME => "read_hold.pat";
+use constant EIT_FILE_NAME => "eit.pat"
 use constant MAX_REG => 65536;
 use constant MAX_RH => 125;
 use constant ID => 1;
@@ -10,6 +11,9 @@ open(my $ws_file, ">", WS_FILE_NAME)
 
 open( my $rh_file, ">", RH_FILE_NAME) 
     or die "Can't open file ", RH_FILE_NAME;
+
+open( my $eit_file, ">", EIT_FILE_NAME)
+    or die "Can't open file", EIT_FILE_NAME;
 
 # Write single write all register with value = address
 for($addr = 0; $addr < MAX_REG; $addr++)
@@ -80,6 +84,16 @@ for($addr = 0; $addr < MAX_REG; $addr++)
 
 close $ws_file;
 close $rh_file;
+
+# EIT function with 251 data bytes
+$eit_req = ":012B0D";
+$sum = 0x1 + 0x2B + 0x0D;
+
+for($i = 0; $i < 251; $i++){
+    $eit_req .= sprintf("%02hhX", $i);
+    $sum += $i
+}
+
 
 # Return Modbus ASCII LRC for array
 sub lrc
