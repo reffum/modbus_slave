@@ -54,8 +54,19 @@ static void responce(
 static void save_debug_info(void);
 
 static void LastErrorString(LPTSTR lpszFunction);
-static /* Replace LF to CRLF */
-void lf2crlf(unsigned char* str);	     
+
+/* Replace LF to CRLF in string. It is needed because gets function return 
+ * only LF symbol at end of the string. 
+ */
+static void lf2crlf(unsigned char* str);	     
+
+/**
+ * The programm usage:
+ * <prgname> <files-list>
+ * files-list - List of test files. Each file contain test MODBUS request and responce, line by line. 
+ * Program read 2 lines from file, line 1 - request, line 2 - responce, take request to MODBUS library and 
+ * save responce. Then check MODBUS responce with file responce. Report error if it was.
+ **/
 int main(int argc, char *argv[])
 {
   char *filename = NULL;
@@ -63,6 +74,7 @@ int main(int argc, char *argv[])
   int r, i, file_n;
   bool error = false;
 
+  // Must be at least one test file
   if(argc < 2)
   {
     printf("Usage: test <test.file>\n\r");
@@ -73,6 +85,7 @@ int main(int argc, char *argv[])
 
   memset(hold_regs, 0, sizeof(hold_regs));
 
+  // Initialize MODBUS 
   mb = modbus_ascii_init(id);
   if(!mb) goto exit;
 
@@ -81,6 +94,7 @@ int main(int argc, char *argv[])
   modbus_ascii_register_func_hand(mb, MB_EIT, eit_hand);
   modbus_ascii_set_resp_handler(mb, responce);
 
+  // For each test file
   for(file_n = 1; file_n < argc; file_n++)
   {
     filename = argv[file_n];
@@ -134,6 +148,10 @@ int main(int argc, char *argv[])
   return 0;
 }
 
+/**
+ * READ HOLD 
+ * Return hold_regs to MODBUS MASTER
+ **/
 static int read_hold_hand(
     uint16_t addr, 
     uint16_t len, 
@@ -147,7 +165,10 @@ static int read_hold_hand(
   return 0;
 }
 
-
+/**
+ * Write single
+ * Write in hold_regs
+ **/
 static int write_single_hand(
     uint16_t addr,
     uint16_t *value)
