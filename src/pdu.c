@@ -32,6 +32,7 @@ static const uint8_t MEI_TYPE1 = 0x0E;
 /* Functions */
 PRIVATE void read_hold(struct pdu*);
 PRIVATE void write_single(struct pdu*);
+PRIVATE void mask_write(struct pdu*);
 PRIVATE void eit(struct pdu*);
 PRIVATE void write_multiple_registers(struct pdu* pdu);
 
@@ -88,6 +89,10 @@ void perf_pdu(struct pdu* t, bool need_resp)
 		
 		case MB_WRITE_MULTIPLE_REGS:
 			write_multiple_registers(t);
+			break;
+		
+		case MB_MASK_WRITE:
+			mask_write(t);
 			break;
 		
 		case MB_EIT:
@@ -202,6 +207,44 @@ void write_single(struct pdu* pdu)
 	pdu->resp_buf[3] = high_byte(value);
 	
 	pdu->is_resp = true;
+}
+
+/* Mask Write Register */
+void mask_write(struct pdu *pdu)
+{
+	uint16_t addr, and_mask, or_mask;
+	int r;
+	
+	addr = byte2word(
+		pdu->req_buf[2], 
+		pdu->req_buf[1]
+	);
+
+	and_mask = byte2word(
+		pdu->req_buf[4], 
+		pdu->req_buf[3]
+	);
+	
+	or_mask = byte2word(
+		pdu->req_buf[6], 
+		pdu->req_buf[5]
+	);
+	
+	r = ((mask_write_handler)(pdu->func_handlers[MB_MASK_WRITE]))
+		(	addr, 
+			and_mask, 
+			or_mask);
+			
+	if(r)
+	{
+		exception_responce(pdu, r);
+		return;		
+	}
+	
+	/* The normal response is the an echo of the request */
+	pdu->resp_count = 7;
+	memcpy(pdu->resp_buf, pdu->req_buf, 7);
+	pdu->is_resp = true;		
 }
 
 /* Encapsulate Interface Transport */

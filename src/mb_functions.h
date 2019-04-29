@@ -16,6 +16,9 @@
 #define MB_WRITE_SINGLE			0x06
 #define MB_WRITE_MULTIPLE_REGS	0x10
 
+// Mask Write Register
+#define MB_MASK_WRITE			0x16
+
 // Encapsulated Interface Transport
 #define MB_EIT					0x2B
 
@@ -65,6 +68,20 @@ typedef int(*write_multiple_registers_handler)(
 	uint16_t addr,
 	unsigned num,
 	const uint16_t* values);
+
+/**
+ * Mask Write Register
+ * addr - register address
+ * and_mask 
+ * or_mask
+ * retval - 0 - SUCESS, other - exception code
+ **/
+typedef int (*mask_write_handler)(
+	uint16_t addr,
+	uint16_t and_mask,
+	uint16_t or_mask
+	);
+
 	
 /**
  * Encapsulated Interface Transport function
