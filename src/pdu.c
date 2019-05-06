@@ -316,7 +316,7 @@ void write_multiple_registers(struct pdu* pdu)
 	
 	byte_count = pdu->req_buf[5];
 	
-	if(byte_count != num*2)
+	if(byte_count != num*2 || num > MB_WR_MULT_MAX)
 	{
 		exception_responce(pdu, MB_ILLEGAL_DATA_VALUE);
 		return;				
@@ -331,8 +331,8 @@ void write_multiple_registers(struct pdu* pdu)
 	for(i = 0; i < num; i++)
 	{
 		values[i] = byte2word(
-						pdu->req_buf[6 + num*2 + 1],
-						pdu->req_buf[6 + num*2]
+						pdu->req_buf[6 + i*2 + 1],
+						pdu->req_buf[6 + i*2]
 					);
 	}
 	

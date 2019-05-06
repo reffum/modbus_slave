@@ -35,6 +35,9 @@
 #define MB_GATEWAY_PATH_UNAVIABLE	0x0A
 #define MB_GATEWAY_TARGET_FAILED	0x0B
 
+// Maximum registers for WRITE MULTIPLE function
+#define MB_WR_MULT_MAX				0x7B
+
 /**
 * @brief Read hold function handler prototipe
 * @addr Start addres
