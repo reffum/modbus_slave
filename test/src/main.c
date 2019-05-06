@@ -132,7 +132,9 @@ int main(int argc, char *argv[])
  exit: 
   if(!error)
   {
+	printf("********************************************************************************\n");
     printf("Test SUCCESS\n\r");
+	printf("********************************************************************************\n");
   }
   else
   {
@@ -190,14 +192,6 @@ static int eit_hand(
     unsigned *size_resp)
 {
   int i;
-  
-  // Print request data
-  printf("EIT: ");
-  for(i = 0; i < size_req; i++){
-    printf("%hX ", data_req[i]);
-  }
-
-  printf("\n");
 
   // Write 251 sequntial numbers in responce
   for(i = 0; i < 251; i++){

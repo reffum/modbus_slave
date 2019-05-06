@@ -356,6 +356,7 @@ void write_multiple_registers(struct pdu* pdu)
 	/* Responce */
 	memcpy(pdu->resp_buf, pdu->req_buf, 5);
 	pdu->is_resp = true;
+	pdu->resp_count = 5;
 }
 
 void exception_responce(
