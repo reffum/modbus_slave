@@ -30,6 +30,7 @@ static const uint8_t MEI_TYPE1 = 0x0E;
 #endif
 
 /* Functions */
+void read_coils(struct pdu *pdu);
 PRIVATE void read_hold(struct pdu*);
 PRIVATE void write_single(struct pdu*);
 PRIVATE void mask_write(struct pdu*);
@@ -79,6 +80,10 @@ void perf_pdu(struct pdu* t, bool need_resp)
 	{	
 		switch(func)
 		{
+		case MB_READ_COILS:
+			read_coils(t);
+			break;
+		
 		case MB_READ_HOLD:
 			read_hold(t);
 			break;
@@ -110,6 +115,48 @@ void perf_pdu(struct pdu* t, bool need_resp)
 /**********************************************************************
 * Private functions
 **********************************************************************/
+void read_coils(struct pdu *pdu)
+{
+	uint16_t addr;
+	uint16_t quantity;
+	int r;
+	
+	addr = byte2word(
+		pdu->req_buf[2],
+		pdu->req_buf[1]
+	);
+	
+	quantity = byte2word(
+		pdu->req_buf[4],
+		pdu->req_buf[3]
+	);
+	
+	if(quantity > READ_COILS_MAX_QUANTITY)
+	{
+		exception_responce(pdu, MB_ILLEGAL_DATA_VALUE);
+		return;
+	}
+	
+	r = ((read_coils_handler)(pdu->func_handlers[MB_READ_COILS]))
+		(	addr, 
+			quantity,
+			(uint8_t*)(pdu->resp_buf + 2)
+		);
+	
+	/* Error */
+	if(r)
+	{
+		exception_responce(pdu, r);
+		return;
+	}
+	
+	// Write responce
+	pdu->resp_buf[0] = MB_READ_COILS;
+	pdu->resp_buf[1] = (quantity % 8) == 0 ? (quantity / 8) : (quantity / 8 + 1);
+	pdu->resp_count = pdu->resp_buf[1] + 2;
+	pdu->is_resp = true;
+}
+
 void read_hold(struct pdu* pdu)
 {
 	uint16_t addr;
@@ -121,7 +168,7 @@ void read_hold(struct pdu* pdu)
 		exception_responce(pdu, MB_ILLEGAL_FUNCTION);
 		return;
 	}
-	
+
 	addr = byte2word(
 		pdu->req_buf[2], 
 		pdu->req_buf[1]
@@ -354,7 +401,7 @@ void write_multiple_registers(struct pdu* pdu)
 	}
 	
 	/* Responce */
-	memcpy(pdu->resp_buf, pdu->req_buf, 5);
+	memcpy(pdu->resp_buf, pdu->req_buf, 6);
 	pdu->is_resp = true;
 	pdu->resp_count = 5;
 }

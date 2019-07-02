@@ -12,6 +12,7 @@
 #define MODBUS_FUNCTION_NUM  127
 
 /* Function codes */
+#define MB_READ_COILS			0x01
 #define MB_READ_HOLD			0x03
 #define MB_WRITE_SINGLE			0x06
 #define MB_WRITE_MULTIPLE_REGS	0x10
@@ -38,6 +39,21 @@
 // Maximum registers for WRITE MULTIPLE function
 #define MB_WR_MULT_MAX				0x7B
 
+// Maximum coils number in READ COILS function
+#define READ_COILS_MAX_QUANTITY		2000
+
+/**
+ * Read coils function handler
+ * addr Start addr
+ * quantity Quantity of coils
+ * coils buffer for cils value
+ * retval 0 - if SUCCES, other > 0 MODBUS EXCEPTION CODE
+ **/
+typedef int (*read_coils_handler)(
+	uint16_t addr,
+	uint16_t quantity,
+	uint8_t *coils);
+	
 /**
 * @brief Read hold function handler prototipe
 * @addr Start addres
